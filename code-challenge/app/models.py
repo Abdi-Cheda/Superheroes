@@ -1,10 +1,53 @@
-from flask_sqlalchemy import SQLAlchemy
-
-db = SQLAlchemy()
+from app import db
+from sqlalchemy.orm import validates
 
 class Hero(db.Model):
-    __tablename__ = 'hero'
-
+    __tablename__ = 'heroes'
     id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(100), nullable=False)
+    super_name = db.Column(db.String(100), nullable=False)
+    powers = db.relationship('HeroPower', back_populates='hero')
 
-# add any models you may need. 
+    def serialize(self):
+        return {
+            'id': self.id,
+            'name': self.name,
+            'super_name': self.super_name
+        }
+
+    def serialize_with_powers(self):
+        return {
+            'id': self.id,
+            'name': self.name,
+            'super_name': self.super_name,
+            'powers': [power.power.serialize() for power in self.powers]
+        }
+
+class Power(db.Model):
+    __tablename__ = 'powers'
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(100), nullable=False)
+    description = db.Column(db.String(255), nullable=False)
+    heroes = db.relationship('HeroPower', back_populates='power')
+
+    def serialize(self):
+        return {
+            'id': self.id,
+            'name': self.name,
+            'description': self.description
+        }
+
+class HeroPower(db.Model):
+    __tablename__ = 'hero_powers'
+    id = db.Column(db.Integer, primary_key=True)
+    strength = db.Column(db.String(50), nullable=False)
+    hero_id = db.Column(db.Integer, db.ForeignKey('heroes.id'), nullable=False)
+    power_id = db.Column(db.Integer, db.ForeignKey('powers.id'), nullable=False)
+    hero = db.relationship('Hero', back_populates='powers')
+    power = db.relationship('Power', back_populates='heroes')
+
+    # Add validation for strength in the HeroPower model
+    @validates('strength')
+    def validate_strength(self, key, strength):
+        assert strength in ['Strong', 'Weak', 'Average']
+        return strength
