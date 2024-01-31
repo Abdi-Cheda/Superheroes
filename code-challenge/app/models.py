@@ -2,35 +2,24 @@ from app import db
 from sqlalchemy.orm import validates
 
 class Hero(db.Model):
-    __tablename__ = 'heroes'
-    __table_args__ = {'extend_existing': True}
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
     super_name = db.Column(db.String(100), nullable=False)
-    powers = db.relationship('HeroPower', back_populates='hero')
+    powers = db.relationship('HeroPower', back_populates='hero', lazy='dynamic')
 
     def serialize(self):
         return {
             'id': self.id,
             'name': self.name,
-            'super_name': self.super_name
-        }
-
-    def serialize_with_powers(self):
-        return {
-            'id': self.id,
-            'name': self.name,
             'super_name': self.super_name,
-            'powers': [power.power.serialize() for power in self.powers]
+            'powers': [power.serialize() for power in self.powers]
         }
 
 class Power(db.Model):
-    __tablename__ = 'powers'
-    __table_args__ = {'extend_existing': True}
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
     description = db.Column(db.String(255), nullable=False)
-    heroes = db.relationship('HeroPower', back_populates='power')
+    heroes = db.relationship('HeroPower', back_populates='power', lazy='dynamic')
 
     def serialize(self):
         return {
@@ -40,17 +29,20 @@ class Power(db.Model):
         }
 
 class HeroPower(db.Model):
-    __tablename__ = 'hero_powers'
-    __table_args__ = {'extend_existing': True}
     id = db.Column(db.Integer, primary_key=True)
     strength = db.Column(db.String(50), nullable=False)
-    hero_id = db.Column(db.Integer, db.ForeignKey('heroes.id'), nullable=False)
-    power_id = db.Column(db.Integer, db.ForeignKey('powers.id'), nullable=False)
+    hero_id = db.Column(db.Integer, db.ForeignKey('hero.id'), nullable=False)
+    power_id = db.Column(db.Integer, db.ForeignKey('power.id'), nullable=False)
     hero = db.relationship('Hero', back_populates='powers')
     power = db.relationship('Power', back_populates='heroes')
 
-    # Add validation for strength in the HeroPower model
     @validates('strength')
     def validate_strength(self, key, strength):
         assert strength in ['Strong', 'Weak', 'Average']
         return strength
+
+    def serialize(self):
+        return {
+            'strength': self.strength,
+            'power': self.power.serialize()
+        }
