@@ -1,19 +1,24 @@
+# app.py
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
+from config import Config
 
-# Initialize Flask app
-app = Flask(__name__)
-app.config.from_object('config.Config')
+db = SQLAlchemy()
+migrate = Migrate()
 
-# Initialize extensions
-db = SQLAlchemy(app)
-migrate = Migrate(app, db)
+def create_app():
+    app = Flask(__name__)
+    app.config.from_object(Config)
 
-# Import models and routes
-with app.app_context():
-    from models import *  # Import models
-    import routes  # Import routes
+    db.init_app(app)
+    migrate.init_app(app, db)
 
-if __name__ == '__main__':
-    app.run(debug=True)
+    with app.app_context():
+        from models import Hero, Power, HeroPower  # Import models here to avoid circular imports
+
+        # Import routes
+        from routes import setup_routes
+        setup_routes(app)
+
+    return app
