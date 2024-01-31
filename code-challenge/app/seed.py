@@ -2,11 +2,19 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.sql import func
 from random import randint, choice
+from app import create_app  # Adjust the import path according to your project structure
+from models import db  # Adjust the import path as necessary
 
+
+app = create_app()
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///superheroes.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
+
+with app.app_context():
+    # Now you can work with the database
+    db.create_all()
 
 class Power(db.Model):
     id = db.Column(db.Integer, primary_key=True)

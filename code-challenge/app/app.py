@@ -8,14 +8,14 @@ from flask import jsonify
 db = SQLAlchemy()
 migrate = Migrate()
 
-def create_app():
-    app = Flask(__name__)
-    app.config.from_object(Config)
 
-    db.init_app(app)
-    migrate.init_app(app, db)
+app = Flask(__name__)
+app.config.from_object(Config)
 
-    with app.app_context():
+db.init_app(app)
+migrate.init_app(app, db)
+
+with app.app_context():
         from models import Hero, Power, HeroPower  # Import models here to avoid circular imports
 
 def setup_routes(app):
