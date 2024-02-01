@@ -1,7 +1,6 @@
 from datetime import datetime
 from flask_sqlalchemy import SQLAlchemy
-from flask import validates
-
+from sqlalchemy.orm import validates
 db = SQLAlchemy()
 
 class Hero(db.Model):
