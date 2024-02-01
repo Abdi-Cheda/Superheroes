@@ -1,74 +1,49 @@
 from app import db
 from app.models import Power, Hero, HeroPower
+from random import choice
 
-# Your seeding logic
+def seed_data():
+    print("🦸‍♀️ Seeding powers...")
+    powers_data = [
+        {"name": "Super Strength", "description": "Gives the wielder super-human strengths"},
+        {"name": "Flight", "description": "Gives the wielder the ability to fly through the skies at supersonic speed"},
+        {"name": "Super Human Senses", "description": "Allows the wielder to use her senses at a super-human level"},
+        {"name": "Elasticity", "description": "Can stretch the human body to extreme lengths"}
+    ]
 
-# app = create_app()
-# app = Flask(__name__)
-# app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///superheroes.db'
-# app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-# db = SQLAlchemy(app)
+    for power_data in powers_data:
+        power = Power(**power_data)
+        db.session.add(power)
 
-# with app.app_context():
-#     # Now you can work with the database
-#     db.create_all()
+    db.session.commit()
 
-# class Power(db.Model):
-#     id = db.Column(db.Integer, primary_key=True)
-#     name = db.Column(db.String(100), nullable=False)
-#     description = db.Column(db.String(250))
+    print("🦸‍♀️ Seeding heroes...")
+    heroes_data = [
+        {"name": "Kamala Khan", "super_name": "Ms. Marvel"},
+        {"name": "Doreen Green", "super_name": "Squirrel Girl"},
+        # Add more heroes as needed
+    ]
 
-# class Hero(db.Model):
-#     id = db.Column(db.Integer, primary_key=True)
-#     name = db.Column(db.String(100), nullable=False)
-#     super_name = db.Column(db.String(100), nullable=False)
+    for hero_data in heroes_data:
+        hero = Hero(**hero_data)
+        db.session.add(hero)
 
-# class HeroPower(db.Model):
-#     id = db.Column(db.Integer, primary_key=True)
-#     hero_id = db.Column(db.Integer, db.ForeignKey('hero.id'), nullable=False)
-#     power_id = db.Column(db.Integer, db.ForeignKey('power.id'), nullable=False)
-#     strength = db.Column(db.String(50))
-# # Create the tables
-# db.create_all()
+    db.session.commit()
 
-# # Seeding the database
-# def seed_data():
-#     print("🦸‍♀️ Seeding powers...")
-#     powers = [
-#         {"name": "super strength", "description": "gives the wielder super-human strengths"},
-#         {"name": "flight", "description": "gives the wielder the ability to fly through the skies at supersonic speed"},
-#         {"name": "super human senses", "description": "allows the wielder to use her senses at a super-human level"},
-#         {"name": "elasticity", "description": "can stretch the human body to extreme lengths"}
-#     ]
+    print("🦸‍♀️ Adding powers to heroes...")
+    strengths = ["Strong", "Weak", "Average"]
+    heroes = Hero.query.all()
 
-#     for power in powers:
-#         db.session.add(Power(**power))
+    for hero in heroes:
+        for _ in range(1, 4):  # Assuming you want to associate each hero with 1 to 3 powers
+            power = Power.query.order_by(db.func.random()).first()  # Random power selection
+            strength = choice(strengths)
+            hero_power = HeroPower(hero=hero, power=power, strength=strength)
+            db.session.add(hero_power)
 
-#     print("🦸‍♀️ Seeding heroes...")
-#     heroes = [
-#         {"name": "Kamala Khan", "super_name": "Ms. Marvel"},
-#         {"name": "Doreen Green", "super_name": "Squirrel Girl"},
-#         # Add the rest of your heroes here...
-#     ]
+    db.session.commit()
 
-#     for hero in heroes:
-#         db.session.add(Hero(**hero))
+    print("🦸‍♀️ Done seeding!")
 
-#     db.session.commit()
-
-#     print("🦸‍♀️ Adding powers to heroes...")
-
-#     strengths = ["Strong", "Weak", "Average"]
-#     heroes = Hero.query.all()
-#     for hero in heroes:
-#         for _ in range(randint(1, 3)):  # Assuming you've imported randint from random
-#             power = Power.query.order_by(func.random()).first()  # For SQLite
-#             hero_power = HeroPower(hero_id=hero.id, power_id=power.id, strength=choice(strengths))  # Assuming you've imported choice from random
-#             db.session.add(hero_power)
-
-#     db.session.commit()
-
-#     print("🦸‍♀️ Done seeding!")
-
-# if __name__ == '__main__':
-#     seed_data()
+if __name__ == '__main__':
+    seed_data()
