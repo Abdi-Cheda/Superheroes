@@ -54,6 +54,8 @@
 
 from sqlalchemy import Column, Integer, String, ForeignKey
 from sqlalchemy.orm import relationship
+from flask_sqlalchemy import SQLAlchemy
+db = SQLAlchemy()
 
 class Hero(db.Model):
     id = Column(Integer, primary_key=True)
