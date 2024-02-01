@@ -1,4 +1,4 @@
-from app import db
+from app import app, db
 from app.models import Power, Hero, HeroPower
 from random import choice
 
