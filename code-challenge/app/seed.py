@@ -5,10 +5,10 @@ from random import choice
 def seed_data():
     print("🦸‍♀️ Seeding powers...")
     powers_data = [
-        {"name": "Super Strength", "super_name": "Gives the wielder super-human strengths"},
-        {"name": "Flight", "super_name": "Gives the wielder the ability to fly through the skies at supersonic speed"},
-        {"name": "Super Human Senses", "super_name": "Allows the wielder to use her senses at a super-human level"},
-        {"name": "Elasticity", "super_name": "Can stretch the human body to extreme lengths"}
+        {"name": "Super Strength", "description": "Gives the wielder super-human strengths"},
+        {"name": "Flight", "description": "Gives the wielder the ability to fly through the skies at supersonic speed"},
+        {"name": "Super Human Senses", "description": "Allows the wielder to use her senses at a super-human level"},
+        {"name": "Elasticity", "description": "Can stretch the human body to extreme lengths"}
     ]
 
     for power_data in powers_data:
