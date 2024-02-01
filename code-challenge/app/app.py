@@ -1,12 +1,10 @@
-from app import app
-from app.models import Hero, Power, HeroPower  # Import models here to avoid circular imports
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///superheroes.db'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
-if __name__ == '__main__':
-    app.run(debug=True, port=5555)
-
-    from app import routes  # Import routes after creating app to avoid circular import
+# Import models after db is created to avoid circular imports
+from app.models import Hero, Power, HeroPower
