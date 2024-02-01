@@ -21,4 +21,5 @@ def get_powers():
 
 @power_routes.route('/powers/<int:power_id>', methods=['GET'])
 def get_power(power_id):
-    power = Power.query.get_or_40
+    power = Power.query.get_or_404(power_id)
+    return jsonify(power.serialize())
