@@ -1,5 +1,6 @@
 from datetime import datetime
 from flask_sqlalchemy import SQLAlchemy
+from flask import validates
 
 db = SQLAlchemy()
 
