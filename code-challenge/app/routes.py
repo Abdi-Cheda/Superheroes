@@ -1,7 +1,7 @@
 from flask import jsonify, request
-from app import app
-from app import db
+from app import app, db
 from models import Hero, Power, HeroPower
+
 # Your routes and view functions
 
 @app.route('/heroes', methods=['GET'])
