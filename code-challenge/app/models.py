@@ -1,5 +1,7 @@
 from app import db
 from sqlalchemy.orm import validates
+from flask_sqlalchemy import SQLAlchemy
+db = SQLAlchemy()
 
 class Hero(db.Model):
     id = db.Column(db.Integer, primary_key=True)
