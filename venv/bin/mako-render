@@ -1,4 +1,4 @@
-#!/Users/mac/Development/Code/phase-4/python-code-challenge-superheroes/venv/bin/python3.12
+#!/Users/mac/Development/Code/phase-4/python-code-challenge-superheroes/venv/bin/python
 # -*- coding: utf-8 -*-
 import re
 import sys
