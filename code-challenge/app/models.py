@@ -7,7 +7,7 @@ class Hero(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
     super_name = db.Column(db.String(100), nullable=False)
-    hero_powers = db.relationship('HeroPower', back_populates='hero', lazy='dynamic')
+    hero_powers = db.relationship('HeroPower', back_populates='hero')
 
     def serialize(self):
         return {
@@ -21,7 +21,7 @@ class Power(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
     description = db.Column(db.String(255), nullable=False)
-    hero_powers = db.relationship('HeroPower', back_populates='power', lazy='dynamic')
+    hero_powers = db.relationship('HeroPower', back_populates='power')
 
     def serialize(self):
         return {

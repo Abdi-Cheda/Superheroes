@@ -1,16 +1,48 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
+from flask import jsonify, request
+from models import Hero, Power, HeroPower,db
+from flask_migrate import Migrate
 
 app = Flask(__name__)
-CORS(app)  # Allow all origins for simplicity; you can configure this according to your needs
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///superheroes.db'
-db = SQLAlchemy(app)
+app.config['SQLALCHEMY_TRACKING_MODIFICATIONS'] = False
+CORS(app)
 
-from routes import hero_routes, power_routes
+migrate=Migrate(app,db)
+db.init_app(app)
 
-app.register_blueprint(hero_routes)
-app.register_blueprint(power_routes)
+@app.route('/')
+def home():
+    return "<h1>HELLO!</h1>"
+
+@app.route('/heroes', methods=['GET'])
+def get_heroes():
+    heroes = [hero.serialize() for hero in Hero.query.all()]
+    # hero_list = [hero.serialize() for hero in heroes]
+    # print (hero_list)
+    return jsonify(heroes)
+
+
+@app.route('/heroes/<int:hero_id>', methods=['GET'])
+def get_hero(hero_id):
+    hero = Hero.query.get_or_404(hero_id)
+    # hero = Hero.query.all(hero_id)
+    return jsonify(hero.serialize())
+
+@app.route('/powers', methods=['GET'])
+def get_powers():
+    powers = [power.serialize() for power in Power.query.all()]
+    return jsonify(powers)
+    # powers = Power.query.all()
+    # return jsonify([power.serialize() for power in powers])
+
+@app.route('/powers/<int:power_id>', methods=['GET'])
+def get_power(power_id):
+    power = Power.query.get_or_404(power_id)
+    return jsonify(power.serialize())
+
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(port=3000, debug=True)
