@@ -5,8 +5,6 @@ from random import choice
 def seed_data():
     with app.app_context():
         db.create_all()
-
-        # Seed powers
         powers_data = [
             {"name": "Super Strength", "description": "Gives the wielder super-human strengths"},
             {"name": "Flight", "description": "Gives the wielder the ability to fly through the skies at supersonic speed"},
@@ -20,11 +18,9 @@ def seed_data():
 
         db.session.commit()
 
-        # Seed heroes
         heroes_data = [
             {"name": "Kamala Khan", "super_name": "Ms. Marvel"},
             {"name": "Doreen Green", "super_name": "Squirrel Girl"},
-            # Add more heroes as needed
         ]
 
         for hero_data in heroes_data:
@@ -32,14 +28,12 @@ def seed_data():
             db.session.add(hero)
 
         db.session.commit()
-
-        # Add powers to heroes
         strengths = ["Strong", "Weak", "Average"]
         heroes = Hero.query.all()
 
         for hero in heroes:
-            for _ in range(1, 4):  # Assuming you want to associate each hero with 1 to 3 powers
-                power = Power.query.order_by(db.func.random()).first()  # Random power selection
+            for _ in range(1, 4):
+                power = Power.query.order_by(db.func.random()).first()
                 strength = choice(strengths)
                 hero_power = HeroPower(hero=hero, power=power, strength=strength)
                 db.session.add(hero_power)

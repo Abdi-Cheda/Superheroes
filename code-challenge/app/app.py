@@ -20,23 +20,18 @@ def home():
 @app.route('/heroes', methods=['GET'])
 def get_heroes():
     heroes = [hero.serialize() for hero in Hero.query.all()]
-    # hero_list = [hero.serialize() for hero in heroes]
-    # print (hero_list)
     return jsonify(heroes)
 
 
 @app.route('/heroes/<int:hero_id>', methods=['GET'])
 def get_hero(hero_id):
     hero = Hero.query.get_or_404(hero_id)
-    # hero = Hero.query.all(hero_id)
     return jsonify(hero.serialize())
 
 @app.route('/powers', methods=['GET'])
 def get_powers():
     powers = [power.serialize() for power in Power.query.all()]
     return jsonify(powers)
-    # powers = Power.query.all()
-    # return jsonify([power.serialize() for power in powers])
 
 @app.route('/powers/<int:power_id>', methods=['GET'])
 def get_power(power_id):
@@ -45,4 +40,4 @@ def get_power(power_id):
 
 
 if __name__ == '__main__':
-    app.run(port=3000, debug=True)
+    app.run(port=3001, debug=True)
