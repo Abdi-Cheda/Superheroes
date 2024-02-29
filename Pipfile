@@ -5,10 +5,16 @@ name = "pypi"
 
 [packages]
 flask = "*"
-flask-migrate = "*"
 flask-sqlalchemy = "*"
-flask-cors = "*"
-"sqlalchemy.orm" = "*"
+Werkzeug = "2.2.2"
+sqlalchemy-serializer = "*"
+flask-migrate = "*"
+flask-restful = "*"
+importlib-metadata = "6.0.0"
+importlib-resources = "5.10.0"
+sqlalchemy = "*"
+gunicorn = "*"
+psycopg2-binary = "*"
 
 [dev-packages]
 
