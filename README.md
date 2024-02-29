@@ -25,9 +25,9 @@ python seed.py
 
 5. Run the application:
 
-python app.py
+flask run
 
-The application will be running on `http://localhost:3001/`.
+The application will be running on `http://localhost:5000/`.
 
 ## Endpoints
 

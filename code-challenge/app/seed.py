@@ -1,10 +1,15 @@
-from app.app import app, db
-from app.models import Power, Hero, HeroPower
+from app import app, db, Power, Hero, HeroPower, Hero
 from random import choice
 
-def seed_data():
+def add_sample_data():
     with app.app_context():
-        db.create_all()
+        print("Deleting existing data...")
+        HeroPower.query.delete()
+        Power.query.delete()
+        Hero.query.delete()
+        db.session.commit()
+
+        print("Adding sample powers...")
         powers_data = [
             {"name": "Super Strength", "description": "Gives the wielder super-human strengths"},
             {"name": "Flight", "description": "Gives the wielder the ability to fly through the skies at supersonic speed"},
@@ -18,6 +23,7 @@ def seed_data():
 
         db.session.commit()
 
+        print("Adding sample heroes...")
         heroes_data = [
             {"name": "Kamala Khan", "super_name": "Ms. Marvel"},
             {"name": "Doreen Green", "super_name": "Squirrel Girl"},
@@ -28,6 +34,8 @@ def seed_data():
             db.session.add(hero)
 
         db.session.commit()
+
+        print("Creating hero-power associations...")
         strengths = ["Strong", "Weak", "Average"]
         heroes = Hero.query.all()
 
@@ -40,5 +48,7 @@ def seed_data():
 
         db.session.commit()
 
-if __name__ == '__main__':
-    seed_data()
+        print("Sample data added successfully!")
+
+if __name__ == "__main__":
+    add_sample_data()

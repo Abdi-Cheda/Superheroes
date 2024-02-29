@@ -1,12 +1,10 @@
 from flask import Flask, jsonify, request
 from flask_migrate import Migrate
-from flask_cors import CORS
-from app.models import db, Power, Hero, HeroPower
+from .models import db, Power, Hero, HeroPower
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///superheroes.db'
 app.config['SQLALCHEMY_TRACKING_MODIFICATIONS'] = False
-CORS(app)
 
 migrate=Migrate(app,db)
 db.init_app(app)
