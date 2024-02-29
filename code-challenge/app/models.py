@@ -1,34 +1,6 @@
-from datetime import datetime
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import validates
-from flask import jsonify, request
 db = SQLAlchemy()
-from app import app
-
-@app.route('/')
-def home():
-    return "<h1>HELLO!</h1>"
-
-@app.route('/heroes', methods=['GET'])
-def get_heroes():
-    heroes = [hero.serialize() for hero in Hero.query.all()]
-    return jsonify(heroes)
-
-
-@app.route('/heroes/<int:hero_id>', methods=['GET'])
-def get_hero(hero_id):
-    hero = Hero.query.get_or_404(hero_id)
-    return jsonify(hero.serialize())
-
-@app.route('/powers', methods=['GET'])
-def get_powers():
-    powers = [power.serialize() for power in Power.query.all()]
-    return jsonify(powers)
-
-@app.route('/powers/<int:power_id>', methods=['GET'])
-def get_power(power_id):
-    power = Power.query.get_or_404(power_id)
-    return jsonify(power.serialize())
 
 class Hero(db.Model):
     id = db.Column(db.Integer, primary_key=True)
