@@ -1,5 +1,5 @@
-from app import app, db
-from models import Power, Hero, HeroPower
+from app.app import app, db
+from app.models import Power, Hero, HeroPower
 from random import choice
 
 def seed_data():
